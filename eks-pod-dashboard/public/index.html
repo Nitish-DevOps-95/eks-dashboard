@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EKS Pod Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Login Screen -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-box">
+      <h2>EKS Pod Dashboard</h2>
+      <form id="loginForm">
+        <input type="text" id="loginUser" placeholder="Username" required />
+        <input type="password" id="loginPass" placeholder="Password" required />
+        <button type="submit">Login</button>
+        <p id="loginError" class="error"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="appScreen" class="hidden">
+    <header>
+      <h1>EKS Pod Dashboard</h1>
+      <div class="header-right">
+        <span id="userInfo"></span>
+        <button id="adminBtn" class="btn-admin hidden" onclick="showAdminPanel()">Admin</button>
+        <button id="restartsBtn" class="btn-restarts" onclick="showRestartsPanel()">Restart Events</button>
+        <button class="btn-logout" onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+    <div class="controls">
+      <select id="clusterSelect"><option value="all">All Clusters</option></select>
+      <select id="namespaceFilter"><option value="all">All Namespaces</option></select>
+      <select id="filterSelect">
+        <option value="all">All Pods</option>
+        <option value="crashed">Crashed / Errors</option>
+        <option value="restarted">Restarted</option>
+        <option value="high-memory">High Memory (Top 30)</option>
+        <option value="high-cpu">High CPU (Top 30)</option>
+      </select>
+      <button id="refreshBtn" class="btn-refresh">Refresh</button>
+    </div>
+
+    <div id="summary" class="summary"></div>
+    <div id="podTable" class="table-container"></div>
+  </div>
+
+  <!-- Admin Panel Modal -->
+  <div id="adminModal" class="modal hidden">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2>Admin Panel</h2>
+        <button class="close-btn" onclick="closeAdmin()">&times;</button>
+      </div>
+      <div class="admin-tabs">
+        <button class="tab-btn active" onclick="switchTab('users')">Users</button>
+        <button class="tab-btn" onclick="switchTab('access')">Namespace Access</button>
+      </div>
+      <div id="adminContent"></div>
+    </div>
+  </div>
+
+  <!-- Log Modal -->
+  <div id="logModal" class="modal hidden">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2 id="logTitle">Pod Logs</h2>
+        <button class="close-btn" onclick="closeLogs()">&times;</button>
+      </div>
+      <pre id="logOutput" class="log-output"></pre>
+    </div>
+  </div>
+
+  <!-- Restart Events Modal -->
+  <div id="restartModal" class="modal hidden">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2>Pod Restart Events (Last 2 Days)</h2>
+        <button class="close-btn" onclick="closeRestarts()">&times;</button>
+      </div>
+      <div class="restart-controls">
+        <select id="restartClusterFilter"><option value="all">All Clusters</option></select>
+        <select id="restartNsFilter"><option value="all">All Namespaces</option></select>
+        <button class="btn-refresh" onclick="loadRestartEvents()">Refresh</button>
+      </div>
+      <div id="restartContent" class="restart-content"></div>
+    </div>
+  </div>
+
+  <!-- Restart Detail Modal -->
+  <div id="restartDetailModal" class="modal hidden">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2 id="restartDetailTitle">Restart Detail</h2>
+        <button class="close-btn" onclick="closeRestartDetail()">&times;</button>
+      </div>
+      <div id="restartDetailContent" class="restart-detail-content"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
